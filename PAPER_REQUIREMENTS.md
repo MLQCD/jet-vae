@@ -4,22 +4,22 @@ This paper presents correlations and approximate common scaling of VAE posterior
 
 ## Assignment and order
 
-Owners below are proposed for assignment, not confirmed commitments. Peiran coordinates the paper package; Sitong supplies the sample/model comparisons she performed. Each contributor owns the provenance of their own results. Reassign a task if its original producer is better placed to complete it.
+The initial division below draws on Peiran's physics background and Sitong's computer-science background. Peiran and Sitong should negotiate the detailed split, agree on target dates and update the table together. These assignments do not imply that either has already accepted a deadline. Each contributor supplies the provenance of their own results. Final proofreading is assigned to Zhen, Peiran, Nadja, Qianwen and Sitong.
 
-| Task | Proposed lead / support | Dependency | Deliverable | Status |
+| Task | Initial lead / support | Dependency | Deliverable | Status |
 |---|---|---|---|---|
-| T1. Recover exact paper inputs | Peiran coordinates; Sitong supplies her comparison inputs | None; start here | Figure/run manifest, exact configs, asset inventory | Unassigned |
-| T2. Quantify common scaling | Peiran; original analysis producer supplies outputs | Relevant T1 inputs | Script and per-model statistics table | Unassigned |
-| T3. Recompute all-active responses | Peiran; Sitong supplies comparisons she produced | Relevant T1 scan inputs | Per-coordinate slopes, all-active summary and revised figures | Unassigned |
-| T4. Verify fit uncertainties | Original fit producer; Peiran integrates | T1 fit inputs; work alongside T3 | Method check, corrected fit outputs if needed, draft-ready methods text | Unassigned |
-| T5. Assemble numerical source data | Each figure producer; Peiran consolidates | Start with T1; finalize after T2–T4 | Source-data inventory, arrays/tables and plotting commands | Unassigned |
-| T6. Reproduce the retained results | Sitong for results she did not produce; another collaborator for her own results | T2–T5 | Reproduction log and resolved discrepancies | Unassigned |
-| T7. Close the manuscript | Zhen with Peiran | T2–T4 for numerical updates; T6 for final sign-off | Consistent text, figures and captions; reviewed PDF | Unassigned |
-| T8. Prepare external release | Peiran packages; Zhen coordinates release decisions | Size inventory from T1/T5; verified package from T6 | Versioned links, checksums, agreed terms and release identifier | Unassigned |
+| T1. Recover exact paper inputs | Peiran: samples/generator settings; Sitong: code/config/checkpoint inventory | None; start here | Figure/run manifest, exact configs, asset inventory | Pending |
+| T2. Quantify common scaling | Sitong: statistical analysis and scripts; Peiran: interpretation | Relevant T1 inputs | Script and per-model statistics table | Pending |
+| T3. Recompute all-active responses | Peiran: response analysis; Sitong: implementation and comparison inputs | Relevant T1 scan inputs | Per-coordinate slopes, all-active summary and revised figures | Pending |
+| T4. Verify fit uncertainties | Peiran: fit definition/interpretation; Sitong: implementation check; original producer supplies inputs | T1 fit inputs; work alongside T3 | Method check, corrected fit outputs if needed, draft-ready methods text | Pending |
+| T5. Assemble numerical source data | Sitong coordinates; each figure producer supplies data; Peiran checks coverage | Start with T1; finalize after T2–T4 | Source-data inventory, arrays/tables and plotting commands | Pending |
+| T6. Reproduce the retained results | Sitong leads the reproduction recipe; Peiran cross-checks Sitong-produced results | T2–T5 | Reproduction log and resolved discrepancies | Pending |
+| T7. Close the manuscript | Peiran integrates; Zhen, Peiran, Nadja, Qianwen and Sitong proofread | T2–T4 for numerical updates; T6 for final sign-off | Consistent text, figures and captions; reviewed PDF | Pending |
+| T8. Prepare external release | Sitong packages; Peiran checks paper correspondence; Zhen coordinates release decisions | Size inventory from T1/T5; verified package from T6 | Versioned links, checksums, agreed terms and release identifier | Pending |
 
 **Start with T1 and the available parts of T5.** T2, T3 and T4 can proceed in parallel as soon as their inputs are identified; do not wait for unrelated figures. T7 can proceed alongside the numerical checks. T8 hosting/licensing logistics can proceed in parallel and are distinct from verifying the scientific results.
 
-For each task, replace `Unassigned` with the agreed owner and target date, then record `In progress`, `Blocked` or `Done` with an output link/commit. The paths below are proposed destinations for new deliverables, not files that already exist. Reuse an existing equivalent path and link it here rather than duplicating outputs.
+For each task, confirm or revise the initial owner and add the agreed target date, then change `Pending` to `In progress`, `Blocked` or `Done` with an output link/commit. The paths below are proposed destinations for new deliverables, not files that already exist. Reuse an existing equivalent path and link it here rather than duplicating outputs.
 
 ## Immediate paper checks
 
@@ -94,7 +94,7 @@ For encoder-level checks, inventory the final checkpoints, exact preprocessing/m
 ### T6. Provide a runnable paper recipe and verify it
 
 - [ ] Add a paper-specific entry point listing the environment, generator cards or equivalent settings, saved-input locations and commands for every retained figure. Clearly distinguish this recipe from generic training examples.
-- [ ] Have a collaborator regenerate the retained figures and quoted statistics from the documented saved inputs without retraining. Record the package/code version, commands, numerical agreement or tolerances, and anything that could not be checked.
+- [ ] Sitong leads the reproducible workflow and checks results she did not produce. Peiran, or another agreed collaborator, independently checks results produced by Sitong. Regenerate the retained figures and quoted statistics from the documented saved inputs without retraining. Record the tester, package/code version, commands, numerical agreement or tolerances, and anything that could not be checked.
 
 **Output:** `paper/README.md` with commands and environment information, and `paper/reproduction_check.md` with the tester, code/input versions, command results, numerical comparisons and any unresolved discrepancy.
 
@@ -105,11 +105,13 @@ For encoder-level checks, inventory the final checkpoints, exact preprocessing/m
 - [ ] Update the methods/configuration description from T1, common-scaling numbers from T2, and response figures, captions and uncertainties from T3–T4. Check each changed number against its source output.
 - [ ] Retain the generator-coupling and cutoff qualifications above. Keep primary claims about the observed correlations and approximate common scaling aligned with the verified results.
 - [ ] Defer PID input/sample comparisons to future work: they did not improve benchmark performance and would complicate this presentation; they do not weaken the central observation. No further PID runs or dedicated PID section are required. Avoid a general claim that PID can never be useful in jet tasks.
-- [ ] Review transitions, acknowledgments, repository link, data/code availability wording and the final compiled PDF. Resolve any discrepancy raised by T6 before treating the corresponding numerical result as final.
+- [ ] Peiran integrates the verified numerical updates, with Zhen coordinating final scientific wording. Resolve any discrepancy raised by T6 before treating the corresponding numerical result as final.
+- [ ] Zhen, Peiran, Nadja, Qianwen and Sitong each proofread the same dated final PDF. Review the argument, figures/captions, transitions, acknowledgments, repository link and data/code availability wording. Each person returns corrections or confirms that they have no further corrections.
+- [ ] Peiran consolidates the comments and circulates the corrected version for confirmation of any substantive changes. Record proofreading completion for each of the five authors.
 
 **Output:** revised manuscript source/figures and matching PDF through the established manuscript workflow, plus a short list mapping numerical changes to T2–T4 outputs. Keep manuscript files in the manuscript project; this code repository need only link the associated release/version.
 
-**Done when:** Zhen and Peiran have reviewed a consistent final draft whose central numbers have passed T6. Repository cleanup alone is not numerical validation.
+**Done when:** all five authors have completed final proofreading, their comments have been resolved, and the central numbers have passed T6. Repository cleanup alone is not numerical validation.
 
 ### T8. Prepare the external release
 
