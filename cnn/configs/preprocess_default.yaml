@@ -1,0 +1,8 @@
+# Defaults of code_training/preprocess_jet_images.py (and _no_pid.py), with the window used in the README example.
+#   python code_training/preprocess_jet_images.py --config configs/preprocess_default.yaml \
+#       --g-jet g.dat --u-jet u.dat --cache-dir <cache>
+image-size: 32
+eta-max: 0.5
+phi-max: 0.5
+val-frac: 0.10
+test-frac: 0.20

@@ -1,0 +1,27 @@
+# Model checkpoints
+*.pth
+
+# Training output plots
+*.png
+
+# SLURM logs
+logs/
+results/
+
+# Data files (too large for GitHub — see README for download instructions)
+data/*.dat
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Cache directory for preprocessed images (if used)
+path/to/cache/
+
+cache_u_event_pt/
+
+# latent_observable_correlation files
+
+#latent_observable_correlations/*outputs
+latent_observable_correlations/*outputs/

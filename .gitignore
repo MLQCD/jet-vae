@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.egg-info/
+# data and model artifacts never go in git (weights: Hugging Face; data: not published)
+*.dat
+*.npy
+*.npz
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.parquet
+*.csv
+cache*/
+runs/
+logs/
+*.out
+*.err
+.DS_Store
+.ipynb_checkpoints/
