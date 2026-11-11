@@ -79,6 +79,21 @@ the defaults of `train_betavae.py`; the image window and size are in `cnn_vae/co
 Command-line flags override the YAML. Loading a saved model and the analysis notebooks are described in
 `cnn_vae/README.md`.
 
+## Paper figures
+
+`paper_figures/` reproduces the figures of the paper. Details, commands and expected inputs are in
+`paper_figures/README.md`.
+
+| Figure | Script | Inputs |
+|---|---|---|
+| Fig. 2, input vs. reconstruction (both VAEs) | `fig2_reconstruction.py` | quark / gluon reference jets, both checkpoints |
+| Fig. 3, correlations of `mu_j` and `ln sigma_j^2` | `fig3_posterior_structure.py` | reference jets, Transformer checkpoint |
+| Fig. 4, joint distributions of `ln sigma^2` pairs | `fig4_logvar_pairs.py` | reference jets, Transformer checkpoint |
+| Figs. 5 and 6, response of `sigma`-space to Pythia parameters | `fig5_6_parameter_response.py` | Pythia scan files (8 parameters x 4 variations + nominal, 10 000 quark and 10 000 gluon jets each), both checkpoints |
+
+The jet samples and the trained checkpoints are not part of this repository; the scripts take their paths on the
+command line. The settings of the image-level VAE used in the paper are in `cnn_vae/configs/betavae_paper.yaml`.
+
 ## Normalization
 
 **Transformer VAE (point set).** Per jet:
