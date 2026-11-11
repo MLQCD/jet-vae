@@ -11,7 +11,6 @@ Variational autoencoders for particle jets (quark vs. gluon).
 ```bash
 pip install -e .                       # Transformer VAE: torch, numpy, scikit-learn, pyyaml
 pip install -r cnn/requirements.txt    # CNN VAE
-python -m unittest discover -s tests -v
 ```
 
 ## Transformer VAE

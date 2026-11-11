@@ -19,7 +19,6 @@ jet_physics/
 │   └── visualize_training_log.py
 │                               # Plot loss curves and latent activity
 ├── train_no_pid_mps.sh          # Local no-PID MPS training launcher
-├── run_compiled_visualize_app.py # Run compiled visualization app
 ├── runs/                        # Timestamped local training outputs
 ├── datas/                       # Raw .dat particle data files
 │   ├── g_jet_real_dynamic_sample.dat
@@ -175,23 +174,7 @@ python ai4jet/vae_cnn/code_training/visualize_training_log.py \
     --summary-json "$RUN/latent_activity_summary.json"
 ```
 
-### 4. Open the compiled visualization app
-
-`ai4jet/vae_cnn/run_compiled_visualize_app.py` is a fallback launcher for the
-compiled visualization app when the source `app.py` and `core.py` files are not
-available.
-
-```bash
-python ai4jet/vae_cnn/run_compiled_visualize_app.py
-```
-
-The script currently loads compiled files from:
-
-```text
-visualize/__pycache__/
-```
-
-### 5. Run directory contents
+### 4. Run directory contents
 
 Each directory under `ai4jet/vae_cnn/runs/` is one training attempt. A typical
 completed no-PID run contains:
