@@ -1,0 +1,21 @@
+# The recipe behind the released no-pid models (beta = 1e-5). These values are also the
+# defaults of jetvae.transformer.train; the file is here so a run documents itself.
+# Pass --seed and --cache-dir/--output on the command line.
+beta: 1.0e-5
+latent_dim: 32
+embed_dim: 128
+depth: 4
+num_heads: 4
+dropout: 0.1
+epochs: 200
+batch_size: 128
+lr: 0.0005
+patience: 30
+kl_warmup_epochs: 0
+angular_scale: 0.4
+sinkhorn_p: 1.0
+sinkhorn_epsilon: 0.05
+sinkhorn_epsilon_final: 0.01
+sinkhorn_epsilon_anneal_epochs: 50
+sinkhorn_n_iters: 50
+sinkhorn_n_iters_final: 150
