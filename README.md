@@ -6,6 +6,11 @@ Variational autoencoders for particle jets (quark vs. gluon).
   reconstruction loss and no particle-ID input.
 - **`cnn_vae/`** – a CNN VAE on jet images (see also `cnn_vae/README.md`).
 
+## Paper checks and reproduction
+
+[Paper requirements](PAPER_REQUIREMENTS.md) tracks the remaining checks, exact-run provenance,
+numerical source data and reproduction commands for the paper.
+
 ## Install
 
 ```bash
