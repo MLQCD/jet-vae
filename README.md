@@ -2,15 +2,15 @@
 
 Variational autoencoders for particle jets (quark vs. gluon).
 
-- **`jetvae/`** – a Transformer VAE on shape-only point sets `(z, eta, phi)` with a Sinkhorn-EMD
+- **`transformer_vae/`** – a Transformer VAE on shape-only point sets `(z, eta, phi)` with a Sinkhorn-EMD
   reconstruction loss and no particle-ID input.
-- **`cnn/`** – a CNN VAE on jet images (see also `cnn/README.md`).
+- **`cnn_vae/`** – a CNN VAE on jet images (see also `cnn_vae/README.md`).
 
 ## Install
 
 ```bash
 pip install -e .                       # Transformer VAE: torch, numpy, scikit-learn, pyyaml
-pip install -r cnn/requirements.txt    # CNN VAE
+pip install -r cnn_vae/requirements.txt    # CNN VAE
 ```
 
 ## Transformer VAE
@@ -25,7 +25,7 @@ Input `.dat` files: one jet per `<event_begin>:id … <event_end>:id` block, one
 **1. Preprocess.**
 
 ```bash
-python -m jetvae.data.preprocess --u-jet u_jets.dat --g-jet g_jets.dat --cache-dir cache/
+python -m transformer_vae.data.preprocess --u-jet u_jets.dat --g-jet g_jets.dat --cache-dir cache/
 ```
 
 Writes `{train,val}_{particles,mask,category,labels}.npy` and `meta.json`. The 85/15 split is stratified
@@ -34,23 +34,23 @@ by label (`--random-state 42`) and is fixed by the cache; the training `--seed` 
 **2. Train.**
 
 ```bash
-python -m jetvae.transformer.train --config configs/nopid_beta1e-5.yaml \
+python -m transformer_vae.train --config transformer_vae/configs/nopid_beta1e-5.yaml \
     --cache-dir cache/ --output runs/s1/best_model.pth --seed 1
 ```
 
 All hyperparameters (β, the Sinkhorn ε and iteration annealing, model size, optimiser) are set in
-`configs/nopid_beta1e-5.yaml`; `configs/nopid_beta1e-4.yaml` is the same with β = 1e-4. A run saves
+`transformer_vae/configs/nopid_beta1e-5.yaml`; `transformer_vae/configs/nopid_beta1e-4.yaml` is the same with β = 1e-4. A run saves
 `best_model.pth` (best validation loss), `best_model_last.pth` (resume state, use `--resume`),
 `best_model_history.json`, `best_model_config.json` and some generated jets.
 
 **3. Encode.**
 
 ```bash
-python -m jetvae.transformer.encode --checkpoint runs/s1/best_model.pth \
+python -m transformer_vae.encode --checkpoint runs/s1/best_model.pth \
     --cache-dir cache/ --split val --out latents_val.npz     # mu, logvar, labels
 ```
 
-or in Python: `from jetvae.transformer.encode import load_model, encode`.
+or in Python: `from transformer_vae.encode import load_model, encode`.
 
 ## CNN VAE
 
@@ -61,18 +61,18 @@ or in Python: `from jetvae.transformer.encode import load_model, encode`.
 Same `.dat` input format. Use `preprocess_jet_images_no_pid.py` for a single-channel (no-pid) image.
 
 ```bash
-python cnn/code_training/preprocess_jet_images.py --config cnn/configs/preprocess_default.yaml \
+python cnn_vae/code_training/preprocess_jet_images.py --config cnn_vae/configs/preprocess_default.yaml \
     --g-jet g_jets.dat --u-jet u_jets.dat --cache-dir cache_images/
 
-python cnn/code_training/train_betavae.py --config cnn/configs/betavae_default.yaml \
+python cnn_vae/code_training/train_betavae.py --config cnn_vae/configs/betavae_default.yaml \
     --cache-dir cache_images/ --output results/betavae/best_model.pth
 ```
 
 All hyperparameters (the KL / annealing mode `loss-type` and its β, γ, capacity settings, the
-reconstruction loss, latent size, optimiser) are set in `cnn/configs/betavae_default.yaml`, which writes out
-the defaults of `train_betavae.py`; the image window and size are in `cnn/configs/preprocess_default.yaml`.
+reconstruction loss, latent size, optimiser) are set in `cnn_vae/configs/betavae_default.yaml`, which writes out
+the defaults of `train_betavae.py`; the image window and size are in `cnn_vae/configs/preprocess_default.yaml`.
 Command-line flags override the YAML. Loading a saved model and the analysis notebooks are described in
-`cnn/README.md`.
+`cnn_vae/README.md`.
 
 ## Normalization
 

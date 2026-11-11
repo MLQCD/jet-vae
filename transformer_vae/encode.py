@@ -1,6 +1,6 @@
 """Load a trained model and encode jets to posterior (mu, logvar).
 
-    python -m jetvae.transformer.encode --checkpoint runs/s1/best_model.pth \
+    python -m transformer_vae.encode --checkpoint runs/s1/best_model.pth \
         --cache-dir cache/ --split val --out latents_val.npz
 
 Output npz: ``mu``, ``logvar`` [N, latent_dim], plus ``labels`` if the cache has them.

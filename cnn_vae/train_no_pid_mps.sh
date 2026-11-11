@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # Run this from the repository root:
-#   bash ai4jet/vae_cnn/train_no_pid_mps.sh
+#   bash cnn_vae/train_no_pid_mps.sh
 
-CACHE="ai4jet/vae_cnn/cache_jet_images_32_no_pid"
-OUTDIR="ai4jet/vae_cnn/runs/no_pid_beta_1_$(date +%Y%m%d_%H%M%S)"
+CACHE="cnn_vae/cache_jet_images_32_no_pid"
+OUTDIR="cnn_vae/runs/no_pid_beta_1_$(date +%Y%m%d_%H%M%S)"
 
 EPOCHS=600
 BATCH_SIZE=256
@@ -25,7 +25,7 @@ N_GENERATE=64
 
 mkdir -p "$OUTDIR"
 
-python ai4jet/vae_cnn/code_training/train_betavae_mps.py \
+python cnn_vae/code_training/train_betavae_mps.py \
     --cache-dir "$CACHE" \
     --epochs "$EPOCHS" \
     --batch-size "$BATCH_SIZE" \

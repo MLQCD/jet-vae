@@ -1,4 +1,4 @@
-"""Torch dataset over the ``.npy`` cache written by ``jetvae.data.preprocess``."""
+"""Torch dataset over the ``.npy`` cache written by ``transformer_vae.data.preprocess``."""
 
 from __future__ import annotations
 

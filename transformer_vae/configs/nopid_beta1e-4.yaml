@@ -1,5 +1,5 @@
 # The recipe behind the released no-pid models (beta = 1e-4). These values are also the
-# defaults of jetvae.transformer.train; the file is here so a run documents itself.
+# defaults of transformer_vae.train; the file is here so a run documents itself.
 # Pass --seed and --cache-dir/--output on the command line.
 beta: 1.0e-4
 latent_dim: 32

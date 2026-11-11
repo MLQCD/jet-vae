@@ -1,6 +1,6 @@
 """Build the training cache from raw ``.dat`` files.
 
-    python -m jetvae.data.preprocess --u-jet u.dat --g-jet g.dat --cache-dir cache/
+    python -m transformer_vae.data.preprocess --u-jet u.dat --g-jet g.dat --cache-dir cache/
 
 Writes ``{train,val}_{particles,mask,category,labels}.npy`` and ``meta.json``:
 

@@ -3,11 +3,11 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jetvae"
+name = "jet-vae"
 version = "0.1.0"
 description = "Transformer VAE with a Sinkhorn-EMD loss for particle jets (z, eta, phi point sets), plus a CNN VAE"
 requires-python = ">=3.9"
 dependencies = ["torch", "numpy", "scikit-learn", "pyyaml"]
 
 [tool.setuptools.packages.find]
-include = ["jetvae*"]
+include = ["transformer_vae*"]

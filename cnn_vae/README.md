@@ -93,14 +93,14 @@ cd path/to/jet-vae/cnn
 
 ### 1. Build the no-PID image cache
 
-`ai4jet/vae_cnn/code_training/preprocess_jet_images_no_pid.py` reads raw
+`cnn_vae/code_training/preprocess_jet_images_no_pid.py` reads raw
 `.dat` files and writes a single-channel cache:
 
 ```bash
-python ai4jet/vae_cnn/code_training/preprocess_jet_images_no_pid.py \
+python cnn_vae/code_training/preprocess_jet_images_no_pid.py \
     --g-jet ../g_jet_real_dynamic_sample.dat \
     --u-jet ../u_jet_real_dynamic_sample.dat \
-    --cache-dir ai4jet/vae_cnn/cache_jet_images_32_no_pid \
+    --cache-dir cnn_vae/cache_jet_images_32_no_pid \
     --image-size 32 \
     --eta-max 0.5 \
     --phi-max 0.5
@@ -124,12 +124,12 @@ cache_jet_images_32_no_pid/
 
 ### 2. Train with Apple MPS or CPU
 
-`ai4jet/vae_cnn/code_training/train_betavae_mps.py` trains from a prebuilt
+`cnn_vae/code_training/train_betavae_mps.py` trains from a prebuilt
 cache and automatically uses MPS when available:
 
 ```bash
-python ai4jet/vae_cnn/code_training/train_betavae_mps.py \
-    --cache-dir ai4jet/vae_cnn/cache_jet_images_32_no_pid \
+python cnn_vae/code_training/train_betavae_mps.py \
+    --cache-dir cnn_vae/cache_jet_images_32_no_pid \
     --epochs 600 \
     --batch-size 256 \
     --lr 1e-3 \
@@ -139,34 +139,34 @@ python ai4jet/vae_cnn/code_training/train_betavae_mps.py \
     --beta 1.0 \
     --patience 20 \
     --n-generate 64 \
-    --output ai4jet/vae_cnn/runs/no_pid_manual/best_model_betavae.pth
+    --output cnn_vae/runs/no_pid_manual/best_model_betavae.pth
 ```
 
 For the standard local run, use the launcher:
 
 ```bash
-bash ai4jet/vae_cnn/train_no_pid_mps.sh
+bash cnn_vae/train_no_pid_mps.sh
 ```
 
 `train_no_pid_mps.sh` sets the no-PID cache path, training hyperparameters,
-creates a timestamped directory under `ai4jet/vae_cnn/runs/`, and saves stdout
+creates a timestamped directory under `cnn_vae/runs/`, and saves stdout
 to `train.log`.
 
 ### 3. Inspect training logs and latent activity
 
-`ai4jet/vae_cnn/code_training/visualize_training_log.py` parses `train.log`,
+`cnn_vae/code_training/visualize_training_log.py` parses `train.log`,
 loads the best checkpoint, computes latent activity on a cache split, and saves
 a summary plot plus optional CSV/JSON outputs.
 
 Example for one run directory:
 
 ```bash
-RUN=ai4jet/vae_cnn/runs/no_pid_beta_1_YYYYMMDD_HHMMSS
+RUN=cnn_vae/runs/no_pid_beta_1_YYYYMMDD_HHMMSS
 
-python ai4jet/vae_cnn/code_training/visualize_training_log.py \
+python cnn_vae/code_training/visualize_training_log.py \
     --log "$RUN/train.log" \
     --checkpoint "$RUN/best_model_betavae.pth" \
-    --cache-dir ai4jet/vae_cnn/cache_jet_images_32_no_pid \
+    --cache-dir cnn_vae/cache_jet_images_32_no_pid \
     --split val \
     --output "$RUN/training_losses_and_latent_activity.png" \
     --epoch-csv "$RUN/parsed_epoch_losses.csv" \
@@ -176,7 +176,7 @@ python ai4jet/vae_cnn/code_training/visualize_training_log.py \
 
 ### 4. Run directory contents
 
-Each directory under `ai4jet/vae_cnn/runs/` is one training attempt. A typical
+Each directory under `cnn_vae/runs/` is one training attempt. A typical
 completed no-PID run contains:
 
 ```text

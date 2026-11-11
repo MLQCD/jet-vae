@@ -1,6 +1,6 @@
 """Train the shape-only (z, eta, phi) Particle Transformer Sinkhorn-EMD VAE.
 
-    python -m jetvae.transformer.train --config configs/nopid_beta1e-5.yaml \
+    python -m transformer_vae.train --config configs/nopid_beta1e-5.yaml \
         --cache-dir cache/ --output runs/s1/best_model.pth --seed 1
 """
 
@@ -18,7 +18,7 @@ import torch
 import yaml
 from torch.utils.data import DataLoader
 
-from ..data.dataset import CachedParticleShapeDataset, collate_cached_batch
+from .data.dataset import CachedParticleShapeDataset, collate_cached_batch
 from .model import ParticleTransformerShapeEMDVAE
 
 
@@ -164,7 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--cache-dir", required=False, default=None,
-                        help="Directory written by jetvae.data.preprocess (required).")
+                        help="Directory written by transformer_vae.data.preprocess (required).")
     parser.add_argument("--max-particles", type=int, default=80)
     parser.add_argument("--val-fraction", type=float, default=0.15)
     parser.add_argument("--random-state", type=int, default=42)
@@ -318,7 +318,7 @@ def main(argv: list[str] | None = None) -> None:
         parser.set_defaults(**load_config_defaults(pre_args.config, parser))
     args = parser.parse_args(argv)
     if not args.cache_dir:
-        parser.error("--cache-dir is required (build it with python -m jetvae.data.preprocess)")
+        parser.error("--cache-dir is required (build it with python -m transformer_vae.data.preprocess)")
     positive_integer_args = {
         "epochs": args.epochs,
         "batch-size": args.batch_size,
