@@ -239,13 +239,13 @@ python code_training/train_betavae.py \
     --epochs    300 \
     --batch-size 256 \
     --lr        1e-3 \
-    --latent-dim 128 \
+    --latent-dim 32 \
     --loss-type H \
     --beta      64 \
     --output    results/betavae/best_model.pth
 
 Or
-python code_training/train_betavae.py --cache-dir path/to/cache --epochs 300 --batch-size 256 --lr 1e-3 --latent-dim 128 --loss-type H --beta 64 --output results/betavae/best_model.pth
+python code_training/train_betavae.py --cache-dir path/to/cache --epochs 300 --batch-size 256 --lr 1e-3 --latent-dim 32 --loss-type H --beta 64 --output results/betavae/best_model.pth
 ```
 
 For beta annealing, use loss type `A`. This keeps the KLD term unchanged and
@@ -257,7 +257,7 @@ python code_training/train_betavae.py \
     --epochs 300 \
     --batch-size 256 \
     --lr 1e-3 \
-    --latent-dim 128 \
+    --latent-dim 32 \
     --loss-type A \
     --recon-loss-weight 1.0 \
     --beta-start 0.0 \
@@ -276,7 +276,7 @@ python code_training/train_betavae.py \
     --epochs 300 \
     --batch-size 128 \
     --lr     1e-3 \
-    --latent-dim 128 \
+    --latent-dim 32 \
     --loss-type B \
     --output results/betavae/best_model.pth
 ```
@@ -292,7 +292,7 @@ python code_training/train_betavae.py \
 | `--epochs`        | `200`                    | Maximum number of training epochs                                         |
 | `--batch-size`    | `64`                     | Mini-batch size                                                           |
 | `--lr`            | `1e-3`                   | Initial learning rate (Adam)                                              |
-| `--latent-dim`    | `128`                    | Size of the latent space**z**                                             |
+| `--latent-dim`    | `32`                     | Size of the latent space**z**                                             |
 | `--hidden-dims`   | `32,64,128,256,512`      | CNN channel sizes; number of values controls the number of conv layers    |
 | `--img-size`      | `64`                     | Spatial resolution of jet images; must be divisible by `2^len(hidden_dims)` |
 | `--loss-type`     | `B`                      | `H` = Higgins beta-VAE; `B` = Burgess capacity-annealing; `A` = beta annealing |

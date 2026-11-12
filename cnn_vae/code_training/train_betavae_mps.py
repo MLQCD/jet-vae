@@ -483,7 +483,7 @@ def main():
                         default=[32, 64, 128, 256, 512],
                         help="Comma-separated CNN channel sizes, e.g. 32,64,128,256,512. "
                         "The number of values is the number of stride-2 conv layers.")
-    parser.add_argument("--latent-dim",    type=int,   default=128)
+    parser.add_argument("--latent-dim",    type=int,   default=32)
     parser.add_argument("--beta",          type=float,   default=1.0)
     parser.add_argument("--beta-start",    type=float, default=0.0,
                         help="Initial beta for --loss-type A beta annealing")
