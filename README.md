@@ -11,6 +11,19 @@ Variational autoencoders for particle jets (quark vs. gluon).
 [Paper requirements](PAPER_REQUIREMENTS.md) tracks the remaining checks, exact-run provenance,
 numerical source data and reproduction commands for the paper.
 
+## Data
+
+The jet samples are on Hugging Face: [Shayla216/jet-vae-samples](https://huggingface.co/datasets/Shayla216/jet-vae-samples).
+
+- `training_jets/u_jet.dat`, `training_jets/g_jet.dat`: 100 000 quark and 100 000 gluon jets (the `.dat` format
+  read by the Transformer VAE preprocessing).
+- `pythia_scan/200GeV_process/`: the Pythia parameter scan (10 000 quark and 10 000 gluon jets for each of 33 settings).
+
+```bash
+pip install huggingface_hub
+hf download Shayla216/jet-vae-samples --repo-type dataset --local-dir data/
+```
+
 ## Install
 
 ```bash
@@ -91,8 +104,8 @@ Command-line flags override the YAML. Loading a saved model and the analysis not
 | Fig. 4, joint distributions of `ln sigma^2` pairs | `fig4_logvar_pairs.py` | reference jets, Transformer checkpoint |
 | Figs. 5 and 6, response of `sigma`-space to Pythia parameters | `fig5_6_parameter_response.py` | Pythia scan files (8 parameters x 4 variations + nominal, 10 000 quark and 10 000 gluon jets each), both checkpoints |
 
-The jet samples and the trained checkpoints are not part of this repository; the scripts take their paths on the
-command line. The settings of the image-level VAE used in the paper are in `cnn_vae/configs/betavae_paper.yaml`.
+The jet samples are on Hugging Face (see [Data](#data)); the trained checkpoints are not part of this repository. The
+scripts take their paths on the command line. The settings of the image-level VAE used in the paper are in `cnn_vae/configs/betavae_paper.yaml`.
 
 ## Normalization
 
