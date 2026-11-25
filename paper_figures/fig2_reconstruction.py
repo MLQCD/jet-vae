@@ -1,80 +1,100 @@
-"""Fig. 2: input jets and their reconstructions f(mu(x)) from the image-level (CNN) and particle-level (Transformer) VAE.
+"""Fig. 2: input, particle reconstruction and image reconstruction (three rows, u/g columns).
 
-    python paper_figures/fig2_reconstruction.py --u-jet u_jet_real_sample.dat --g-jet g_jet_real_sample.dat \
-        --cnn-checkpoint CNN32/best_model_betavae.pth --transformer-checkpoint run_2.pth --out fig2.pdf
-
-The paper uses event 4 of the quark file and event 77395 of the gluon file. Both models see the same two jets.
+Defaults reproduce the current illustrative events, file-local indices 45050 and 77395,
+with the epoch-739 CNN (effective beta=2e-6) and epoch-134 Transformer (beta=1e-5).
+Run from any directory, passing both raw sample files and checkpoint paths.
 """
 import argparse
+from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.cm import ScalarMappable
+from matplotlib.ticker import AutoMinorLocator
 import numpy as np
 
-from common import (BINS, LIM, cnn_input_image, decode_cnn, decode_transformer, encode_cnn, encode_transformer,
-                    load_cnn, load_jets, load_transformer, particles_to_image, set_paper_style)
+from common import (cnn_input_image, decode_cnn, decode_transformer, encode_cnn, encode_transformer,
+                    load_cnn, load_jets, load_transformer, particles_to_image, set_paper_style,
+                    resolve_device, require_image_events, validate_paper_cnn)
+
+
+def plot_reconstructions(panels, out, vmax=0.3):
+    """panels[class, input/particle/image, eta, phi]; fixed paper color scale."""
+    if np.shape(panels) != (2, 3, 32, 32) or vmax <= 0:
+        raise ValueError("Expected six 32x32 maps and a positive color maximum")
+    set_paper_style()
+    norm=Normalize(0,vmax)
+    cmaps=[LinearSegmentedColormap.from_list('original_input',['white',np.array([81/255,167/255,192/255])*.9],N=4097,gamma=.62),
+     LinearSegmentedColormap.from_list('original_reco',['white',np.array([1.,.5,0])*.9],N=4097,gamma=.62)]
+    W,H=4.95,5.65
+    side=1.50
+    xs=[.87,2.62]
+    ys=[3.82,2.12,.42]
+    fig=plt.figure(figsize=(W,H))
+    axes=[]
+    row_labels=['Input','Particle-level VAE\nreconstruction','Image-level VAE\nreconstruction']
+    for r in range(3):
+        fig.text(.15/W,(ys[r]+side/2)/H,row_labels[r],rotation=90,fontsize=10.5,ha='center',va='center',linespacing=1.05)
+        for c in range(2):
+            ax=fig.add_axes([xs[c]/W,ys[r]/H,side/W,side/H])
+            ax.imshow(panels[c,r],origin='lower',extent=(-.5,.5,-.5,.5),norm=norm,
+                      cmap=cmaps[0 if r==0 else 1],interpolation='nearest',aspect='equal')
+            ticks=[-.5,-.25,0,.25,.5]
+            labels=['-0.5','-0.25','0','0.25','0.5']
+            ax.set_xticks(ticks,labels);ax.set_yticks(ticks,labels)
+            ax.set_xlim(-.5,.5);ax.set_ylim(-.5,.5)
+            ax.xaxis.set_minor_locator(AutoMinorLocator(2));ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+            ax.tick_params(which='major',top=True,right=True,length=3.2,width=.7,labelsize=9.5,pad=5,
+                           labelbottom=(r==2),labelleft=(c==0))
+            ax.tick_params(which='minor',top=True,right=True,length=1.6,width=.5)
+            if r==2:ax.set_xlabel(r'$\Delta\phi$',fontsize=11.5,labelpad=1)
+            if c==0:ax.set_ylabel(r'$\Delta\eta$',fontsize=11.5,labelpad=1)
+            axes.append(ax)
+    for x,jet in zip(xs,['u','g']):
+        fig.text((x+side/2)/W,5.47/H,rf'${jet}$ jet',fontsize=11.5,ha='center',va='center')
+    for r0,r1,cmap in [(0,0,cmaps[0]),(1,2,cmaps[1])]:
+        cax=fig.add_axes([4.25/W,ys[r1]/H,.065/W,(ys[r0]+side-ys[r1])/H])
+        cb=fig.colorbar(ScalarMappable(norm=norm,cmap=cmap),cax=cax,orientation='vertical')
+        cb.set_ticks(np.linspace(0,vmax,4),labels=[f'{v:g}' for v in np.linspace(0,vmax,4)])
+        cb.set_label(r'Normalized $p_T$ per pixel',fontsize=10,labelpad=4)
+        cb.ax.tick_params(direction='in',length=3,width=.6,labelsize=9.5,pad=3)
+        cb.outline.set_linewidth(.65)
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out, dpi=350)
+    plt.close(fig)
+    print("saved", out)
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--u-jet", required=True); p.add_argument("--g-jet", required=True)
-    p.add_argument("--u-index", type=int, default=4); p.add_argument("--g-index", type=int, default=77395)
+    p.add_argument("--u-index", type=int, default=45050); p.add_argument("--g-index", type=int, default=77395)
     p.add_argument("--cnn-checkpoint", required=True); p.add_argument("--transformer-checkpoint", required=True)
-    p.add_argument("--vmax", type=float, default=None, help="colour-scale maximum (default: largest input pixel)")
+    p.add_argument("--device", default="cpu", help="CPU matches the paper reconstruction; GPU kernels may differ slightly")
+    p.add_argument("--vmax", type=float, default=0.3)
     p.add_argument("--out", default="fig2_reconstruction.pdf")
     a = p.parse_args(argv)
-    set_paper_style()
-
-    jets = [load_jets(a.u_jet), load_jets(a.g_jet)]
-    idx = [a.u_index, a.g_index]
-    events = [j["events"][i] for j, i in zip(jets, idx)]
-    par = np.stack([j["particles"][i] for j, i in zip(jets, idx)])
-    msk = np.stack([j["mask"][i] for j, i in zip(jets, idx)])
-
-    # image-level VAE: input image, decode(mu)
-    cnn, _ = load_cnn(a.cnn_checkpoint)
-    img_in = np.stack([cnn_input_image(e) for e in events])                         # [2, 1, phi, eta]
-    mu_c, _ = encode_cnn(cnn, img_in)
-    cnn_in = img_in[:, 0].transpose(0, 2, 1)                                         # -> [eta, phi]
-    cnn_out = decode_cnn(cnn, mu_c)[:, 0].transpose(0, 2, 1)
-
-    # particle-level VAE: input list, decode(mu), both converted to the same image representation
-    tr, _ = load_transformer(a.transformer_checkpoint)
-    mu_t, _ = encode_transformer(tr, par, msk)
-    tr_in = particles_to_image(par, msk)
-    tr_out = particles_to_image(decode_transformer(tr, mu_t))
-
-    vmax = a.vmax or float(max(cnn_in.max(), tr_in.max()))
-    print(f"colour scale 0 .. {vmax:.4f}  (paper: 0.175)")
-    print("input images, CNN vs particle list: max |difference| =", float(np.abs(cnn_in - tr_in).max()))
-
-    from matplotlib.colors import LinearSegmentedColormap
-    cmap_in = LinearSegmentedColormap.from_list("white_blue", ["white", "#0b4f9c"])
-    cmap_out = LinearSegmentedColormap.from_list("white_orange", ["white", "#cc5500"])
-    ticks = [0, vmax / 3, 2 * vmax / 3, vmax]
-    fig = plt.figure(figsize=(14, 7.4))
-    outer = fig.add_gridspec(1, 2, wspace=0.28, left=0.06, right=0.98, top=0.86, bottom=0.24)
-    panels = [("(a) Image-level VAE", cnn_in, cnn_out), ("(b) Particle-level VAE", tr_in, tr_out)]
-    ext = [-LIM, LIM, -LIM, LIM]
-    maps = {}
-    for k, (title, im_in, im_out) in enumerate(panels):
-        inner = outer[k].subgridspec(2, 2, wspace=0.45, hspace=0.45)
-        fig.text(0.27 + 0.47 * k, 0.955, title, ha="center", fontsize=15)
-        fig.text(0.27 + 0.47 * k, 0.915, f"u: event {a.u_index}    g: event {a.g_index}", ha="center", fontsize=9, color="0.4")
-        for r, (imgs, cmap, kind) in enumerate(((im_in, cmap_in, "Input"), (im_out, cmap_out, "Reconstruction"))):
-            for c, cls in enumerate(("u", "g")):
-                ax = fig.add_subplot(inner[r, c])
-                maps[kind] = ax.imshow(imgs[c], origin="lower", extent=ext, cmap=cmap, vmin=0, vmax=vmax)
-                ax.set_title(f"{cls} jet | {kind}", fontsize=11)
-                ax.set_xlabel(r"$\Delta\phi$"); ax.set_ylabel(r"$\Delta\eta$")
-                ax.set_xticks([-0.5, -0.25, 0, 0.25, 0.5]); ax.set_yticks([-0.5, -0.25, 0, 0.25, 0.5])
-    for x0, kind, label in ((0.10, "Input", r"Input: normalized $p_T$ per pixel"),
-                            (0.57, "Reconstruction", r"Reconstruction: normalized $p_T$ per pixel")):
-        cb = fig.colorbar(maps[kind], cax=fig.add_axes([x0, 0.12, 0.30, 0.022]), orientation="horizontal", ticks=ticks)
-        cb.ax.set_xticklabels([f"{v:.3g}" for v in ticks]); cb.set_label(label, fontsize=10)
-    fig.text(0.5, 0.02, "Illustrative examples | linear scale | deterministic decode(mu)", ha="center", fontsize=9, color="0.4")
-    fig.savefig(a.out, bbox_inches="tight"); print("saved", a.out)
+    device = resolve_device(a.device)
+    events, particles, masks = [], [], []
+    for path, idx in ((a.u_jet, a.u_index), (a.g_jet, a.g_index)):
+        jets = load_jets(path); require_image_events(jets)
+        if not 0 <= idx < len(jets["particles"]):
+            p.error(f"Event index {idx} is outside {path}")
+        events.append(jets["events"][idx]); particles.append(jets["particles"][idx]); masks.append(jets["mask"][idx])
+    par, mask = np.stack(particles), np.stack(masks)
+    cnn, ck = load_cnn(a.cnn_checkpoint); validate_paper_cnn(ck)
+    tr, _ = load_transformer(a.transformer_checkpoint, device)
+    images = np.stack([cnn_input_image(e) for e in events])
+    mu_c, _ = encode_cnn(cnn, images, device=device)
+    mu_t, _ = encode_transformer(tr, par, mask, device=device)
+    panels = np.stack([images[:, 0].transpose(0, 2, 1),
+                       particles_to_image(decode_transformer(tr, mu_t)),
+                       decode_cnn(cnn, mu_c)[:, 0].transpose(0, 2, 1)], axis=1)
+    print(f"File-local event indices: u={a.u_index}, g={a.g_index}; deterministic decode(mu)")
+    plot_reconstructions(panels, a.out, a.vmax)
 
 
 if __name__ == "__main__":

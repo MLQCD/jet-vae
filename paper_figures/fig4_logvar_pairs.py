@@ -1,4 +1,6 @@
-"""Fig. 4: joint distributions of ln sigma^2 for five pairs of active latent dimensions of the particle-level VAE
+"""Legacy standalone diagnostic (these distributions are now integrated into Fig. 3).
+
+Joint distributions of ln sigma^2 for five pairs of active latent dimensions of the particle-level VAE
 (same balanced sample as Fig. 3). Pairs are given by their original latent indices.
 
     python paper_figures/fig4_logvar_pairs.py --u-jet u_jet.npz --g-jet g_jet.npz --transformer-checkpoint run_2.pth

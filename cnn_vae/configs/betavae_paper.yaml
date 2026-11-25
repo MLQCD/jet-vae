@@ -1,18 +1,24 @@
-# Settings of the image-level (CNN) VAE used in the paper, read back from its checkpoint (CNN32/best_model_betavae.pth,
-# saved at epoch 520). Effective final KL weight = beta / recon-loss-weight = 1e-6.
-# Not stored in the checkpoint, so not listed here: epochs, batch-size, lr, patience (code defaults apply unless set).
-#   python code_training/train_betavae.py --config configs/betavae_paper.yaml --cache-dir <no-pid cache> --output <file.pth>
+# Image-level model used in current Figs. 2-5: no-PID CNN32, selected epoch 739.
+# Checkpoint SHA256: d56032767a8961a28df616ef318246efd2cd1ec4615aeee49bdc7ff518526083
+# Values below are read from that checkpoint. Effective KL weight is beta / recon-loss-weight:
+# it anneals from 1 to 2e-6 over 80000 optimizer steps, then stays at 2e-6.
+# The checkpoint records steps, not epochs; an epoch conversion requires the original loader size.
+# The run lasted 800 epochs. Batch size, lr and patience are not stored in the checkpoint;
+# supply the original values explicitly to reproduce training (otherwise code defaults apply).
+# python cnn_vae/code_training/train_betavae.py --config cnn_vae/configs/betavae_paper.yaml \
+#     --cache-dir <no-pid cache> --output <file.pth>
 no-pid: true
 img-size: 32
 eta-max: 0.5
 phi-max: 0.5
 latent-dim: 32
 hidden-dims: [32, 64, 128, 256, 512]
+epochs: 800
 
-loss-type: A                      # beta annealing
-beta: 1.0e-3
+loss-type: A
+beta: 2.0e-3
 beta-start: 1000.0
-beta-anneal-iter: 40000
+beta-anneal-iter: 80000
 beta-anneal-schedule: log_linear
 recon-loss-type: mse
 recon-loss-weight: 1000.0
