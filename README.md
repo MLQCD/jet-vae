@@ -118,6 +118,35 @@ The two particle beta=1e-5 training runs are listed separately; current-paper
 checkpoints are explicitly marked. This collection has its own topic names and
 is separate from the manuscript figure numbering.
 
+## Non-jet benchmarks
+
+The paper compares the posterior-width structure of the jet VAEs with that of VAEs trained on four standard
+image datasets. The datasets are not redistributed here; each is subject to the terms of its source page
+(CelebA is available for non-commercial research purposes only).
+
+| Dataset | Content | Image used | Source |
+|---|---|---|---|
+| MNIST | handwritten digits, 60 000 training and 10 000 test images (28 × 28) | 1 × 32 × 32 (resized) | LeCun, Bottou, Bengio, Haffner, *Proc. IEEE* **86**, 2278 (1998), [yann.lecun.com/exdb/mnist](http://yann.lecun.com/exdb/mnist/) |
+| FashionMNIST | clothing items in 10 classes, 60 000 training and 10 000 test images (28 × 28) | 1 × 32 × 32 (resized) | Xiao, Rasul, Vollgraf, [arXiv:1708.07747](https://arxiv.org/abs/1708.07747), [github.com/zalandoresearch/fashion-mnist](https://github.com/zalandoresearch/fashion-mnist) |
+| CelebA | 202 599 celebrity face photographs with 40 binary attributes | 3 × 64 × 64 | Liu, Luo, Wang, Tang, *Proc. ICCV* (2015), [mmlab.ie.cuhk.edu.hk/projects/CelebA.html](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) |
+| dSprites | 737 280 binary images of 2D shapes, generated from five factors (shape, scale, orientation, x and y position) | 1 × 64 × 64 | Matthey, Higgins, Hassabis, Lerchner (2017), [github.com/deepmind/dsprites-dataset](https://github.com/deepmind/dsprites-dataset/) |
+
+The code is [YannDubs/disentangling-vae](https://github.com/YannDubs/disentangling-vae) (Dubois, Kastanos, Lines,
+Melman, 2019; MIT licence), used unmodified; it is not copied into this repository. In the paper table, the rows
+marked R use the pre-trained models that ship in the `results/` directory of that repository, and the rows marked O
+are models we trained ourselves with the same code. If you use these benchmarks, please also cite the datasets above
+and disentangling-vae:
+
+```bibtex
+@misc{dubois2019dvae,
+  title        = {Disentangling VAE},
+  author       = {Dubois, Yann and Kastanos, Alexandros and Lines, Dave and Melman, Bart},
+  month        = {march},
+  year         = {2019},
+  howpublished = {\url{http://github.com/YannDubs/disentangling-vae/}}
+}
+```
+
 ## Normalization
 
 **Transformer VAE (point set).** Per jet:
