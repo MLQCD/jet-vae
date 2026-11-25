@@ -1,5 +1,7 @@
 # jet-vae
 
+[![Hugging Face Models](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-FFD21E?labelColor=555555)](https://huggingface.co/Shayla216/jet-vae-models)
+
 Variational autoencoders for particle jets (quark vs. gluon).
 
 - **`transformer_vae/`** – a Transformer VAE on shape-only point sets `(z, eta, phi)` with a Sinkhorn-EMD
@@ -168,7 +170,8 @@ and disentangling-vae:
 
 ## Weights
 
-Trained weights will be released on Hugging Face (link to be added).
+The trained models of the paper (jet and non-jet tables) are on Hugging Face:
+[Shayla216/jet-vae-models](https://huggingface.co/Shayla216/jet-vae-models).
 
 ## License
 
