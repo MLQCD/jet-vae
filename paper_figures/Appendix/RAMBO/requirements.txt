@@ -1,0 +1,2 @@
+# Generator alone only needs NumPy. For plotting use ../requirements.txt.
+numpy>=1.24

@@ -1,0 +1,24 @@
+{
+  "manuscript_figures": {
+    "9": "RAMBO multiplicity comparison",
+    "10": "RAMBO multiplicity response",
+    "11": "Particle latent/observable correlations"
+  },
+  "checkpoint_sha256": "e8e59c4f836b2c1df728a3970439ecde1db3f889208556a4b4eaccc7f24a42b2",
+  "source_array_sha256": {
+    "qcd_common_width": "3e90c81f60db9cf51fa855214f1d6fc386af2c95d725d5a2b830b98fc7a1895c",
+    "rambo_fixed_N_posteriors": "3db3801ad37a6e22d78abaf185abe93a9ff4c3b5319c92dc5f426c7452d68c27",
+    "qcd_multiplicities": "67e9f95ac6b9b96a4efff271170ae3b542c4fc06cc944f6661d63e128f63236a",
+    "rambo_matched_responses": "a53af57745c91621a3060ee6b694042533307a1f9431bfc414c930ca86fe12f4",
+    "observable_correlations": "1d771262d4a6c83ce796b8f6d4a25c36f2dbd28bb6071cf9e0fb0d5d4ecc4c08"
+  },
+  "plot_data_sha256": {
+    "data/fig11_correlations.json": "7f6985f79a84d93d82d0f06e4887730217c3f34d79a42db424bfdc1ad43066d9",
+    "RAMBO/data/fig10_response.json": "9ebdee17885d70bd0da3f222404686a674550363e3fef0861d46d866fe0aec77",
+    "RAMBO/data/fig9_distributions.json": "40d5878f54e0204991832b2f8e57e24b466daa28f02798eb2f866925375717fd",
+    "RAMBO/data/multiplicity_targets.json": "b0a2aead2a8039a46a08480770f49659ff1d5229c283596512b16a91363f783a",
+    "RAMBO/data/reference_basis.json": "234992e16e72204c6311605f3dbbd2f7fcc0424beee88177871d1de81d93f62f"
+  },
+  "note": "Small numerical plot inputs exported from the current manuscript analyses; no raw event samples or model weights included.",
+  "plot_data_hash_convention": "SHA256 of UTF-8 text with CRLF normalized to LF"
+}

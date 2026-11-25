@@ -1,6 +1,8 @@
 # Reproducing the paper figures
 
 The scripts below correspond to Figs. 2-5 of the current manuscript.
+The current appendix Figs. 9-11 (RAMBO and observable correlations) are in
+[Appendix/](Appendix/README.md).
 
 | Figure | Script | Needs |
 |---|---|---|
