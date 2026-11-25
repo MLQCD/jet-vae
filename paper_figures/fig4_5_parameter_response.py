@@ -17,7 +17,7 @@ not the effective shower cutoff.
 The scan layout remains {u_jet,g_jet}/nominal.npz and
 {u_jet,g_jet}/<parameter>/{minus_20pct,minus_10pct,plus_10pct,plus_20pct}.npz.
 Cached means and variances are tied to the checkpoint content and input files.
-Use --recompute after changing inputs or when replacing a legacy cache.
+Use --recompute after changing inputs or when replacing an incompatible cache.
 """
 import argparse
 import hashlib

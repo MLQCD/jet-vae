@@ -23,7 +23,7 @@ from jet_image_utils import event_to_jet_image_no_pid, pt_normalize    # noqa: E
 
 BINS, LIM = 32, 0.5           # image grid used by both models: 32 x 32 over |d_eta|, |d_phi| < 0.5
 
-__all__ = ["BINS", "LIM", "load_jets", "balanced_sample", "load_transformer", "encode_transformer",
+__all__ = ["BINS", "LIM", "load_jets", "load_transformer", "encode_transformer",
            "load_cnn", "encode_cnn", "decode_cnn", "decode_transformer", "particles_to_image",
            "cnn_input_image", "balanced_inputs", "resolve_device", "require_image_events",
            "validate_paper_cnn", "active_dimensions", "sigma_scalar_coefficients", "set_paper_style"]
@@ -62,12 +62,6 @@ def balanced_inputs(u_path, g_path, n_per_class=5000, seed=42):
     return {key: (None if any(j[key] is None for j in selected) else
                   selected[0][key] + selected[1][key] if key == "events" else
                   np.concatenate([j[key] for j in selected])) for key in selected[0]}
-
-
-def balanced_sample(u_path, g_path, n_per_class=5000, seed=42):
-    """Legacy particle-only interface, with the same event selection as balanced_inputs."""
-    jets = balanced_inputs(u_path, g_path, n_per_class, seed)
-    return jets["particles"], jets["mask"]
 
 
 # ----------------------------------------------------------------------------- CNN (image-level) VAE
