@@ -96,6 +96,8 @@ Command-line flags override the YAML. Loading a saved model and the analysis not
 
 `paper_figures/` contains the reproduction scripts for current manuscript Figs. 2-5.
 See [the figure instructions](paper_figures/README.md) for commands and expected inputs.
+The current appendix RAMBO and observable-correlation figures are in
+[paper_figures/Appendix/](paper_figures/Appendix/README.md).
 
 | Figure | Script | Inputs |
 |---|---|---|
@@ -105,6 +107,16 @@ See [the figure instructions](paper_figures/README.md) for commands and expected
 
 The jet samples are on Hugging Face (see [Data](#data)); the trained checkpoints are not part of this repository. The
 scripts take their paths on the command line. The settings of the image-level VAE used in the paper are in `cnn_vae/configs/betavae_paper.yaml`.
+
+## Supplementary model comparison
+
+[model_comparison/](model_comparison/README.md) compares five CNN32 and seven
+particle Transformer32 checkpoints across beta settings, with shared dijet samples
+and RAMBO controls. It includes [a topic-grouped report](model_comparison/beta_comparison.pdf),
+individual figures, numerical plot inputs, checkpoint metadata and reproduction scripts.
+The two particle beta=1e-5 training runs are listed separately; current-paper
+checkpoints are explicitly marked. This collection has its own topic names and
+is separate from the manuscript figure numbering.
 
 ## Normalization
 

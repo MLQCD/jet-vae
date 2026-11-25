@@ -18,3 +18,6 @@ logs/
 *.err
 .DS_Store
 .ipynb_checkpoints/
+
+# Local inference caches for supplementary model comparisons
+comparison_work/
